@@ -2,7 +2,7 @@ FROM ubuntu:18.04
 LABEL maintainer="tstav@163.com" version="1.0" description="ubuntu environment"
 
 #aliyun
-COPY sources.list /etc/apt/sources.list
+RUN sed -i "s/archive.ubuntu.com/mirrors.aliyun.com/g" /etc/apt/sources.list
 ENV DEBIAN_FRONTEND noninteractive
 #install vim
 RUN apt-get update && apt-get install -y vim wget firefox --fix-missing
