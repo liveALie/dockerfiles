@@ -34,3 +34,18 @@ RUN rm cuda-repo-ubuntu1804-10-2-local-10.2.89-440.33.01_1.0-1_amd64.deb
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 # Set locale
 ENV LANG C.UTF-8 LC_ALL=C.UTF-8
+
+# Install general packages
+RUN apt-get update && apt-get install -y wget && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*    
+# New installation of tensorflow-model-server    
+RUN TEMP_DEB="$(mktemp)" \    && wget -O "$TEMP_DEB" 'http://storage.googleapis.com/tensorflow-serving-apt/pool/tensorflow-model-server-1.8.0/t/tensorflow-model-server/tensorflow-model-server_1.8.0_all.deb' \ 
+    && dpkg -i "$TEMP_DEB" \ 
+    && rm -f "$TEMP_DEB" \ 
+    && mkdir /tmp/model-export    
+    
+EXPOSE 9000
+# Serve the model when the container starts
+ENTRYPOINT ["tensorflow_model_server"] CMD ["--port=9000", "--model_name=model", "--model_base_path=/tmp/model-export"]
+
