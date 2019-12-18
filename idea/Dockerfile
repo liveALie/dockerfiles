@@ -15,3 +15,4 @@ ENV PATH ${JAVA_HOME}/bin:$PATH
 RUN apt-get update && apt-get install -y gedit --fix-missing && apt-get clean && rm -rf /var/lib/apt/lists/*
 ADD ideaIC-2019.3.tar.gz /usr/local
 ADD .IdeaIC2019.3 ~
+ENV PATH /usr/local/idea-IC-193.5233.102/bin:$PATH
